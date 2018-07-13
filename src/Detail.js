@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { ApiDetailMovie } from './ApiDetailMovie';
+import { ApiDetailMovie } from './Api/ApiDetailMovie';
 import axios from 'axios';
 import {
     Breadcrumb,
@@ -92,19 +92,23 @@ class DetailMovie extends React.Component {
         let priceMovie;
         let AlreadyHave;
         if (ratingMovie < 1){
-            priceMovie = '--'
+            priceMovie = '--';
+            AlreadyHave = 'You dont have.';
         } else if (ratingMovie >= 0 && ratingMovie <= 3){
             priceMovie = Number(3.500).toFixed(3);
-            AlreadyHave = 'Already Have.'
+            AlreadyHave = 'Already Have.';
         } else if(ratingMovie > 3 && ratingMovie <= 6){
             priceMovie = Number(8.250).toFixed(3);
-            AlreadyHave = 'Already Have.'
+            AlreadyHave = 'Already Have.';
         } else if(ratingMovie > 6 && ratingMovie <= 8){
             priceMovie = Number(16.350).toFixed(3);
-            AlreadyHave = 'You dont have.'
-        } else {
+            AlreadyHave = 'You dont have.';
+        } else if(ratingMovie > 8 && ratingMovie <= 10){
             priceMovie = Number(21.250).toFixed(3);
-            AlreadyHave = 'You dont have.'
+            AlreadyHave = 'You dont have.';
+        } else {
+            priceMovie = '--';
+            AlreadyHave = 'You dont have.';
         }
             // castMovie = this.state.castMovies[0];
         // console.log(this.state.castMovies.slice(0, 10))

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import { Card, Icon } from 'semantic-ui-react';
 import axios from 'axios';
-import { ApiNowPlaying } from './ApiNowPlaying';
+import { ApiNowPlaying } from './Api/ApiNowPlaying';
 
 const extra = (price,idMovie, titleMovie) => (
     <Link to={'/'+idMovie+'-'+titleMovie}>
