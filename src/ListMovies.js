@@ -1,8 +1,8 @@
 import React from 'react';
-import { BrowserRouter as Router, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Card, Icon } from 'semantic-ui-react';
 import axios from 'axios';
-import ApiNowPlaying from './ApiNowPlaying';
+import { ApiNowPlaying } from './ApiNowPlaying';
 
 const extra = (price,idMovie, titleMovie) => (
     <Link to={'/'+idMovie+'-'+titleMovie}>
@@ -16,11 +16,11 @@ class ListMovies extends React.Component {
       movies: []
     }
   
-    componentDidMount() {
-      axios.get(ApiNowPlaying)
-        .then(res => {
-            const movies = res.data.results;
-            this.setState({ movies });
+    componentWillMount() {
+        axios.get(ApiNowPlaying)
+            .then(res => {
+                const movies = res.data.results;
+                this.setState({ movies });
         })
     }
 
@@ -30,7 +30,7 @@ class ListMovies extends React.Component {
             let Rate = movie.vote_average;
             let AlreadyHave;
             let PathMovie = movie.title;
-            PathMovie = PathMovie.replace(/\s+/g, '-').toLowerCase();
+            PathMovie = PathMovie.replace(/[^a-zA-Z0-9&]+/g, '-').toLowerCase();
             if (Rate < 1){
                 Price = '--'
             } else if (Rate >= 0 && Rate <= 3){
@@ -56,11 +56,9 @@ class ListMovies extends React.Component {
         })
         // console.log(Harga);
         return (
-            <Router>
-                <Card.Group itemsPerRow={4}>
-                    {DetailCard}
-                </Card.Group>
-            </Router>
+            <Card.Group itemsPerRow={4}>
+                {DetailCard}
+            </Card.Group>
         )
     }
 }

@@ -2,12 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
 import ListMovies from './ListMovies.js'
-
-const About = () => (
-    <div>
-      <h2>About</h2>
-    </div>
-);
+import DetailMovies from './Detail';
 
 const NoMatch = () => (
     <div>
@@ -21,7 +16,7 @@ class containerHome extends Component {
             <Container>
                 <Switch>
                     <Route path="/" exact component={ListMovies} />
-                    <Route path="/123" exact component={About} />
+                    <Route path="/:id-:slug" component={DetailMovies} />
                     <Route component={NoMatch} />
                 </Switch>
             </Container>

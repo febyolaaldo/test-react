@@ -1,3 +1,32 @@
 .ui.container{
   margin-top: 60px;
 }
+.content-detail{
+  display: block;
+}
+.content-detail--year{
+  font-weight: 400;
+  font-size: 20px;
+  opacity: 0.7;
+}
+.content-detail--title{
+  margin-top: 20px!important;
+}
+.content-detail--rating{
+  font-size: 25px;
+  vertical-align: middle
+}
+.content-detail--overview{
+  font-size: 17px;
+}
+.container-runtime{
+  margin-bottom: 20px;
+}
+.content-detail--runtime{
+  font-size: 22px;
+  vertical-align: top;
+}
+.content-detail--cart{
+  font-size: 20px;
+  vertical-align: top;
+}

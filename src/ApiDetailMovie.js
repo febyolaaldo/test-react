@@ -1,0 +1,1 @@
+export const ApiDetailMovie = (id) => 'https://api.themoviedb.org/3/movie/'+id+'?api_key=fac5be4c80f2e6e5fe75431a75102f5f&append_to_response=credits';
