@@ -30,3 +30,9 @@
   font-size: 20px;
   vertical-align: top;
 }
+.no-result{
+  font-size: 20px;
+  font-style: italic;
+  margin-left: 10px;
+  margin-bottom: 20px;
+}

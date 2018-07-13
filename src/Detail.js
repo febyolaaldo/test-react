@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ApiDetailMovie } from './Api/ApiDetailMovie';
 import axios from 'axios';
+import { ApiDetailMovie } from './Api/ApiDetailMovie';
+import { ApiSimiliarMovies } from './Api/ApiSimiliarMovies';
+import { ApiRecommendationMovies } from './Api/ApiRecommendationMovies';
 import {
     Breadcrumb,
     Container,
@@ -11,7 +13,7 @@ import {
     Icon,
     Card,
     Label
-} from 'semantic-ui-react'
+} from 'semantic-ui-react';
 
 const BreadcrumbDetail = () => (
     <Breadcrumb size='large'>
@@ -62,23 +64,55 @@ const CardCast = (props) => (
     />
 )
 
+const RatingMovie = (rating) => (
+    <a>
+        <Icon name='star' />
+        {rating}
+    </a>
+)
+
+const CardMovies = (props) => (
+    <Card
+        image={props.image}
+        header={props.title}
+        meta={props.release}
+        extra={RatingMovie(props.rating)}
+    />
+)
+
 class DetailMovie extends React.Component {
     state = {
         detailMovies: [],
-        castMovies: []
+        castMovies: [],
+        similiarMovies: [],
+        recommendationMovies: []
     }
 
     componentDidMount() {
         const id = this.props.match.params.id;
         axios.get(ApiDetailMovie(id))
             .then(res => {
-                console.log(res.data);
+                // console.log(res.data);
                 const movies = res.data;
                 const cast = res.data.credits.cast;
                 this.setState({
                     detailMovies: movies,
                     castMovies: cast
                 });
+        })
+        axios.get(ApiSimiliarMovies(id))
+            .then(res => {
+                const similiar = res.data.results;
+                this.setState({
+                    similiarMovies: similiar
+                })
+        })
+        axios.get(ApiRecommendationMovies(id))
+            .then(res => {
+                const recommendation = res.data.results;
+                this.setState({
+                    recommendationMovies: recommendation
+                })
         })
     }
 
@@ -110,8 +144,6 @@ class DetailMovie extends React.Component {
             priceMovie = '--';
             AlreadyHave = 'You dont have.';
         }
-            // castMovie = this.state.castMovies[0];
-        // console.log(this.state.castMovies.slice(0, 10))
         const CastMovie = this.state.castMovies.slice(0, 5).map((movie, key) => {
             let avatarCast;
             let nameCast = movie.name;
@@ -128,6 +160,38 @@ class DetailMovie extends React.Component {
                     avatar={avatarCast}
                     name={nameCast}
                     character={characterCast}
+                />
+            )
+        })
+        const SimiliarMovies = this.state.similiarMovies.slice(0, 5).map((movie, key) => {
+            let imageSimiliar = movie.poster_path;
+            let titleSimiliar = movie.title;
+            let releaseSimiliar = new Date(movie.release_date);
+            let ratingSimiliar = movie.vote_average;
+
+            return (
+                <CardMovies
+                    key={key}
+                    image={'https://image.tmdb.org/t/p/w500'+imageSimiliar}
+                    title={titleSimiliar}
+                    release={releaseSimiliar.getFullYear()}
+                    rating={ratingSimiliar}
+                />
+            )
+        })
+        const RecommendationMovies = this.state.recommendationMovies.slice(0, 5).map((movie, key) => {
+            let imageRecommendation = movie.poster_path;
+            let titleRecommendation = movie.title;
+            let releaseRecommendation = new Date(movie.release_date);
+            let ratingRecommendation = movie.vote_average;
+
+            return (
+                <CardMovies
+                    key={key}
+                    image={'https://image.tmdb.org/t/p/w500'+imageRecommendation}
+                    title={titleRecommendation}
+                    release={releaseRecommendation.getFullYear()}
+                    rating={ratingRecommendation}
                 />
             )
         })
@@ -148,6 +212,14 @@ class DetailMovie extends React.Component {
                 <Header as='h1'>Top Cast</Header>
                 <Card.Group itemsPerRow={5}>
                     {CastMovie}
+                </Card.Group>
+                <Header as='h1'>Similiar Movies</Header>
+                <Card.Group itemsPerRow={5} >
+                    {SimiliarMovies.length > 0? SimiliarMovies : (<span className="no-result">No Similiar.</span>)}
+                </Card.Group>
+                <Header as='h1'>Recommendation Movies</Header>
+                <Card.Group itemsPerRow={5} >
+                    {RecommendationMovies.length > 0? RecommendationMovies : (<span className="no-result">No Recommendation.</span>)}
                 </Card.Group>
             </Container>
         )
