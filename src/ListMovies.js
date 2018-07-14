@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import { Card, Icon } from 'semantic-ui-react';
+import { Card, Icon, Header, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import { ApiNowPlaying } from './Api/ApiNowPlaying';
 
@@ -11,17 +11,38 @@ const extra = (price,idMovie, titleMovie) => (
     </Link>
 )
 
+let pageMovie = 1;
+
 class ListMovies extends React.Component {
+    constructor(props) {
+        super(props);
+
+        // This binding is necessary to make `this` work in the callback
+        this.handleClick = this.handleClick.bind(this);
+    }
+
     state = {
       movies: []
     }
   
     componentWillMount() {
-        axios.get(ApiNowPlaying)
+        axios.get(ApiNowPlaying(pageMovie))
             .then(res => {
                 const movies = res.data.results;
                 this.setState({ movies });
         })
+    }
+
+    handleClick = () => {
+        pageMovie++;
+        axios.get(ApiNowPlaying(pageMovie))
+            .then(res => {
+                const movies = res.data.results;
+                this.setState({
+                    movies: movies
+                });
+        })
+        this.props.history.push('/?page='+pageMovie)
     }
 
     render() {
@@ -54,11 +75,18 @@ class ListMovies extends React.Component {
                 />
             )
         })
-        // console.log(Harga);
         return (
-            <Card.Group itemsPerRow={4}>
-                {DetailCard}
-            </Card.Group>
+            <div>
+                <Header as='h1'>Now Playing</Header>
+                <Card.Group itemsPerRow={4}>
+                    {DetailCard.length > 0? DetailCard : (<span className="no-result">No Movies</span>)}
+                </Card.Group>
+                {DetailCard.length > 0? (
+                    <Button className="btn-loadmore" content='Load More' onClick={this.handleClick} />
+                ) : (
+                    <a href="/"><Button className="btn-loadmore">Back to Home</Button></a>
+                )}
+            </div>
         )
     }
 }

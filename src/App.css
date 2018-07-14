@@ -1,6 +1,10 @@
 .ui.container{
   margin-top: 60px;
 }
+.btn-loadmore{
+  display: block!important;
+  margin: 30px auto!important;
+}
 .content-detail{
   display: block;
 }

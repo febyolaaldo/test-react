@@ -1,84 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import axios from 'axios';
 import { ApiDetailMovie } from './Api/ApiDetailMovie';
 import { ApiSimiliarMovies } from './Api/ApiSimiliarMovies';
 import { ApiRecommendationMovies } from './Api/ApiRecommendationMovies';
 import {
-    Breadcrumb,
     Container,
-    Grid,
-    Image,
     Header,
-    Icon,
-    Card,
-    Label
+    Card
 } from 'semantic-ui-react';
-
-const BreadcrumbDetail = () => (
-    <Breadcrumb size='large'>
-        <Breadcrumb.Section>
-            <Link to="/">
-                Home
-            </Link>
-        </Breadcrumb.Section>
-        <Breadcrumb.Divider icon='right angle' />
-        <Breadcrumb.Section active>Detail</Breadcrumb.Section>
-    </Breadcrumb>
-)
-
-const ContentDetail = (props) => (
-    <Grid style={{marginTop: '30px'}} >
-        <Grid.Column width={5}>
-            <Image src={props.poster} rounded />
-        </Grid.Column>
-        <Grid.Column width={1}>
-            
-        </Grid.Column>
-        <Grid.Column className="content-detail" width={10}>
-            <Header className="content-detail--title" as='h1'>{props.title} <span className="content-detail--year">{'('+props.year+')'}</span></Header>
-            <Icon name='star' size='large' />
-            <span className="content-detail--rating">{props.rating}</span>
-            <Header as='h3'>Overview</Header>
-            <p className="content-detail--overview">{props.overview}</p>
-            <div className="container-runtime">
-                <Icon name='time' size='large' />
-                <span className="content-detail--runtime">{props.runtime+' Min'}</span>
-            </div>
-            <div className="container-runtime">
-                <Icon name='cart' size='large' />
-                <span className="content-detail--cart">{props.price}</span>
-            </div>
-            <Label>
-                <Label.Detail>{props.have}</Label.Detail>
-            </Label>
-        </Grid.Column>
-    </Grid>
-)
-
-const CardCast = (props) => (
-    <Card
-        image={props.avatar}
-        header={props.name}
-        description={props.character}
-    />
-)
-
-const RatingMovie = (rating) => (
-    <a>
-        <Icon name='star' />
-        {rating}
-    </a>
-)
-
-const CardMovies = (props) => (
-    <Card
-        image={props.image}
-        header={props.title}
-        meta={props.release}
-        extra={RatingMovie(props.rating)}
-    />
-)
+import BreadcrumbDetail from './Components/Breadcrumb';
+import ContentDetail from './Components/ContentDetail';
+import CardCast from './Components/CardCast';
+import CardMovies from './Components/CardMovies';
 
 class DetailMovie extends React.Component {
     state = {
@@ -139,10 +72,10 @@ class DetailMovie extends React.Component {
             AlreadyHave = 'You dont have.';
         } else if(ratingMovie > 8 && ratingMovie <= 10){
             priceMovie = Number(21.250).toFixed(3);
-            AlreadyHave = 'You dont have.';
+            AlreadyHave = 'You do not have.';
         } else {
             priceMovie = '--';
-            AlreadyHave = 'You dont have.';
+            AlreadyHave = 'You do not have.';
         }
         const CastMovie = this.state.castMovies.slice(0, 5).map((movie, key) => {
             let avatarCast;
